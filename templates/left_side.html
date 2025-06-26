@@ -1,0 +1,91 @@
+
+<form action="{% url 'app' %}" method="post">
+    {%csrf_token%}
+            
+        <label>idInstance:</label>
+        <input type="text" name="id_instance" required value="{{ id_instance|default:'' }}"><br>
+        <label>ApiTokenInstance:</label>
+        <input type="text" name="api_token_instance" required value="{{ api_token_instance|default:'' }}"><br><br>
+
+        <button type="submit" name="action" value="get_settings">getSettings</button>
+        <br>
+        <br>
+
+        <button type="submit" name="action" value="get_state_instance">getStateInstance</button>
+        <hr>
+       
+        <label>Номер телефона (чата):</label>
+        <input type="text" name="other_id_sendMessage">
+
+        <select name="suffix_sendMessage">
+        <option value="@c.us" selected>@c.us</option>
+        <option value="@g.us">@g.us</option>
+        </select>
+        <br>
+
+        <label>Текст:</label>
+        <input type="text" name="message_text_sendMessage"><br>
+
+        <button
+            type="submit"
+            name="action" value="send_message"
+            onclick="return validateMessage('sendMessage')"
+        >sendMessage</button>
+
+        <hr>
+
+       
+        <label>Номер телефона (чата):</label>
+        <input type="text" name="other_id_sendFileByUrl">
+
+        <select name="suffix_sendFileByUrl">
+        <option value="@c.us" selected>@c.us</option>
+        <option value="@g.us">@g.us</option>
+        </select>
+        <br>
+
+        <label>URL:</label>
+        <input type="text" name="message_text_sendFileByUrl"><br>
+
+          <label>Название файла с расширением:</label>
+        <input type="text" name="file_name_sendFileByUrl"><br>
+
+        <button
+            type="submit"
+            name="action" value="send_file_by_url"
+            onclick="return validateMessage('sendFileByUrl')"
+        >sendFileByUrl</button>
+      </form>
+
+      <script>
+function validateMessage(index) {
+  const globalId = document.querySelector('[name="id_instance"]').value.trim();
+  const globalToken = document.querySelector('[name="api_token_instance"]').value.trim();
+  const peerId = document.querySelector(`[name="other_id_${index}"]`)?.value.trim();
+  const msg = document.querySelector(`[name="message_text_${index}"]`)?.value.trim();
+  const flnField = document.querySelector(`[name="file_name_${index}"]`);
+  const fln = flnField ? flnField.value.trim() : null;
+
+  if (!globalId || !globalToken) {
+    alert("Заполните общие поля: idInstance и ApiTokenInstance");
+    return false;
+  }
+
+  if (!peerId) {
+    alert("Заполните поле номера телефона");
+    return false;
+  }
+
+  if (index === "sendMessage" && !msg) {
+    alert("Введите текст сообщения");
+    return false;
+  }
+
+  if (index === "sendFileByUrl" && (!msg || !fln)) {
+    alert("Заполните URL и имя файла");
+    return false;
+  }
+
+  return true;
+}
+</script>
