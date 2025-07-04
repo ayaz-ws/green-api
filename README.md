@@ -1,3 +1,5 @@
+https://ajax-blog.ru/ - реализация на сервере
+
 Веб-приложение на Django, которая обрабатывает следующие методы GREEN-API:
   • getSettings
   • getStateInstance
